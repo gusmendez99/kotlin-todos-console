@@ -11,7 +11,11 @@ class ToDoList (
         toDoList.add(toDo)
     }
 
-    fun getAllToDos():String {
+    fun getAllToDos(): ArrayList<ToDo> {
+        return toDoList
+    }
+
+    fun getAllToDosString():String {
         var toDos:String = ""
         for(i in toDoList.indices){
             toDos += "${i + 1}. ${toDoList.get(i)}\n"
@@ -19,9 +23,13 @@ class ToDoList (
         return toDos
     }
 
-    fun getIncompleteToDos():String {
+    fun getIncompleteToDos(): List<ToDo> {
+        return toDoList.filter{!it.state}
+    }
+
+    fun getIncompleteToDosString():String {
         var toDos:String = ""
-        val incompleteToDos = toDoList.filter{!it.state}
+        val incompleteToDos = getIncompleteToDos()
 
         for(i in incompleteToDos.indices){
             toDos += "${i + 1}. ${incompleteToDos.get(i)}\n"
@@ -39,6 +47,7 @@ class ToDoList (
     fun deleteToDo(pos:Int) {
         toDoList.removeAt(pos)
     }
+
 
     /*
     override fun toString(): String {

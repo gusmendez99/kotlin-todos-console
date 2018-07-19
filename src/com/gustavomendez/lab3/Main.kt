@@ -25,12 +25,13 @@ fun getMainMenu(isEmptyList:Boolean): String {
 
 fun getToDoListMenu(listName:String): String {
     return """
-        MENU:
-        1. Deseleccionar lista actual ${listName}
+        MENU LISTA:
+        1. Deseleccionar lista actual: ${listName}
         2. Agregar una tarea
         3. Completar una tarea
         4. Ver todas las tareas en esta lista
-        5. Salir
+        5. Eliminar tarea
+        6. Salir
     """.trimIndent()
 }
 
@@ -86,6 +87,7 @@ fun main(args: Array<String>) {
                         when (option) {
                             1 -> {
                                 currentToDoListIndex = -1
+                                println("LISTA DESELECCIONADA\n")
                             }
                             2 -> {
                                 //Agregar tarea
@@ -95,21 +97,31 @@ fun main(args: Array<String>) {
                                 println("TAREA AGREGADA EXITOSAMENTE")
                             }
                             3 -> {
-                                println("TAREAS:")
-                                println(toDoListBoard.get(pos - 1).getIncompleteToDos())
-                                print("Ingrese el numero de tarea a completar: ")
-                                val toDoIndex = readLine()!!.toInt()
-                                //Cambiar estado de tarea
-                                toDoListBoard.get(pos - 1).getToDo(toDoIndex - 1)!!.changeState()
-                                println("TAREA COMPLETADA EXITOSAMENTE!")
+                                if(toDoListBoard.get(pos - 1).getIncompleteToDos().isEmpty()) {
+                                    println("NO HAY TAREAS PENDIENTES")
+                                } else {
+                                    println("TAREAS:")
+                                    println(toDoListBoard.get(pos - 1).getIncompleteToDosString())
+                                    print("Ingrese el numero de tarea a completar: ")
+                                    val toDoIndex = readLine()!!.toInt()
+                                    //Cambiar estado de tarea
+
+                                    val toDoIncomplete:ToDo = toDoListBoard.get(pos - 1).getIncompleteToDos().get(toDoIndex - 1)
+
+                                    val originalIndex:Int = toDoListBoard.get(pos - 1).getAllToDos().indexOf(toDoIncomplete)
+                                    toDoListBoard.get(pos - 1).getToDo(originalIndex)!!.changeState()
+                                    println("TAREA COMPLETADA EXITOSAMENTE!")
+                                }
+
+
                             }
                             4 -> {
                                 println("TAREAS:")
-                                println(toDoListBoard.get(pos - 1).getAllToDos())
+                                println(toDoListBoard.get(pos - 1).getAllToDosString())
                             }
                             5 -> {
                                 println("TAREAS:")
-                                println(toDoListBoard.get(pos - 1).getIncompleteToDos())
+                                println(toDoListBoard.get(pos - 1).getAllToDosString())
                                 print("Ingrese el numero de tarea a eliminar: ")
                                 val toDoIndex = readLine()!!.toInt()
                                 //Eliminar tarea
